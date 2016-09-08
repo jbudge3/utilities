@@ -127,8 +127,15 @@ var _ = { };
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
     var invocations = [];
-    for (var i = 0; i < list.length; i++) {
-      invocations.push(list[i][methodName](args));
+    if (typeof methodName === 'string') {
+      for (var i = 0; i < list.length; i++) {
+        invocations.push(list[i][methodName](args));
+      }
+    } else {
+      for (var i = 0; i < list.length; i++) {
+        debugger
+        invocations.push(methodName.call(list[i], args));
+      }
     }
     return invocations;
   };
@@ -137,7 +144,11 @@ var _ = { };
   // iterator(previousValue, item) for each item. previousValue should be
   // the return value of the previous iterator call.
   _.reduce = function(collection, iterator, initialValue) {
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
 
+      }
+    }
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -200,12 +211,30 @@ var _ = { };
 
   // Extend a given object with all the properties of the passed in
   // object(s).
+
+
   _.extend = function(obj) {
+    var newObj = {};
+    for (var prop in arguments) {
+      for (var inProp in arguments[prop]) {
+        newObj[inProp] = arguments[prop][inProp];
+      }
+    }
+    return newObj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var newObj = {};
+    for (var prop in arguments) {
+      for (var inProp in arguments[prop]) {
+        if (!(inProp in newObj)) {
+          newObj[inProp] = arguments[prop][inProp];
+        }
+      }
+    }
+    return newObj;
   };
 
 
@@ -217,6 +246,13 @@ var _ = { };
   // Return a function that can be called at most one time. Subsequent calls
   // should return the previously returned value.
   _.once = function(func) {
+    return function() {
+      var i = 0;
+      if (i === 0) {
+        func();
+        i = 1;
+      }
+    }
   };
 
   // Memoize an expensive function by storing its results. You may assume
@@ -235,6 +271,7 @@ var _ = { };
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+
   };
 
 
@@ -248,6 +285,7 @@ var _ = { };
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    return collection.sort(iterator);
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -256,6 +294,13 @@ var _ = { };
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+    var zippedArr = [];
+    for (var prop in arguments) {
+      for (var i = 0; i < arguments[prop].length; i++) {
+        zippedArr.push(arguments[prop][i]);
+      }
+    }
+    return zippedArr;
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
@@ -265,7 +310,18 @@ var _ = { };
 
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
+  var args = {
+    0: ['moe', 'curly'],
+    1: ['moe', 'joe']
+  }
+
   _.intersection = function() {
+    var inCommon = [];
+    for (var outProp in arguments) {
+      for (var i = 0; i < arguments[outProp].length; i++) {
+
+      }
+    }
   };
 
   // Take the difference between one array and a number of other arrays.
